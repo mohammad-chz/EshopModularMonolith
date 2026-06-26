@@ -9,14 +9,14 @@ namespace Catalog.Products.Models
         public string? ImageFile { get; private set; }
         public decimal Price { get; private set; }
 
-        public static Product Create(Guid id, string name, List<string> category, string? description, string? imageFile, decimal price)
+        public static Product Create(string name, List<string> category, string? description, string? imageFile, decimal price)
         {
             ArgumentException.ThrowIfNullOrEmpty(name);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
 
             var product = new Product
             {
-                Id = id,
+                Id = SequentialGuid.NewId(),
                 Name = name,
                 Category = category,
                 Description = description,

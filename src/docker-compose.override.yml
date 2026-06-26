@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  eshobdb:
+    environment:
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+      - TZ=UTC
+    ports:
+      - "1433:1433"
+    # Uncomment for development/debugging
+    # stdin_open: true
+    # tty: true

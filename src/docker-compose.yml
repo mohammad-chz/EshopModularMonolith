@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  eshobdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: eshobdb
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - eshobdb-data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  eshobdb-data:
+    name: eshobdb-data
