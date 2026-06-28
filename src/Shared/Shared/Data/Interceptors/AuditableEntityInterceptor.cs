@@ -5,7 +5,7 @@ using Shared.DDD;
 
 namespace Shared.Data.Interceptors
 {
-    public class AuditableEntityInterceptors : SaveChangesInterceptor
+    public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
@@ -13,10 +13,10 @@ namespace Shared.Data.Interceptors
             return base.SavingChanges(eventData, result);
         }
 
-        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
             UpdateEntities(eventData.Context);
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
+            return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
         private static void UpdateEntities(DbContext? context)
@@ -35,7 +35,7 @@ namespace Shared.Data.Interceptors
                 if (entity.State == EntityState.Added || entity.State == EntityState.Modified || entity.HasChangedOwnedEntities())
                 {
                     entity.Entity.LastModifiedBy = "mohammad.chz";
-                    entity.Entity.CreatedAt = DateTime.UtcNow;
+                    entity.Entity.LastModified = DateTime.UtcNow;
                 }
             }
         }

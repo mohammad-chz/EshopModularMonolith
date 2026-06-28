@@ -35,15 +35,15 @@ namespace Catalog.Products.Models
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
 
             Name = name;
-            Category = category;
+            Category = [.. category];
             Description = description;
             ImageFile = imageFile;
-            Price = price;
 
-            if (Price == price)
-                return;
-
-            AddDomainEvent(new ProductPriceChangedEvent(this));
+            if (Price != price)
+            {
+                Price = price;
+                AddDomainEvent(new ProductPriceChangedEvent(this));
+            }
         }
     }
 }
