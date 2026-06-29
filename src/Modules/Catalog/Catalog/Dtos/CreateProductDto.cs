@@ -1,7 +1,6 @@
 ﻿namespace Catalog.Dtos;
 
-public record ProductDto(
-    Guid Id,
+public record CreateProductDto(
     string Name,
     List<string> Category,
     string? Description,
