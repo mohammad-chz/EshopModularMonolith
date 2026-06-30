@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Products\Features\GetProductsByCategory\" />
-    <Folder Include="Products\Features\GetProducts\" />
     <Folder Include="Products\Features\GetProductById\" />
   </ItemGroup>
 
