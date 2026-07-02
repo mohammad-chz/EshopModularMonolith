@@ -1,5 +1,4 @@
 ﻿using Catalog.Data;
-using Catalog.Dtos;
 using Shared.CQRS;
 
 namespace Catalog.Products.Features.CreateProduct;
@@ -8,7 +7,7 @@ public record CreateProductCommand(CreateProductDto Dto) : ICommand<CreateProduc
 
 public record CreateProductResult(Guid Id);
 
-internal class CreateProductHandler(CatalogDbContext context) : ICommandHandler<CreateProductCommand, CreateProductResult>
+public class CreateProductHandler(CatalogDbContext context) : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {

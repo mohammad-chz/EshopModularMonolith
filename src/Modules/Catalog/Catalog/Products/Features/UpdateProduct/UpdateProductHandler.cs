@@ -1,5 +1,4 @@
 ﻿using Catalog.Data;
-using Catalog.Dtos;
 using Catalog.Products.Exceptions;
 using Shared.CQRS;
 
