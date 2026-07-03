@@ -6,13 +6,13 @@ using Shared.CQRS;
 
 namespace Catalog.Products.Features.GetProductById;
 
-public record GetProductByIdHandlerQuery(Guid Id) : ICommand<GetProductByIdResult>;
+public record GetProductByIdQuery(Guid Id) : ICommand<GetProductByIdResult>;
 
 public record GetProductByIdResult(ProductListDto Product);
 
-internal class GetProductByIdHandler(CatalogDbContext context) : ICommandHandler<GetProductByIdHandlerQuery, GetProductByIdResult>
+internal class GetProductByIdHandler(CatalogDbContext context) : ICommandHandler<GetProductByIdQuery, GetProductByIdResult>
 {
-    public async Task<GetProductByIdResult> Handle(GetProductByIdHandlerQuery query, CancellationToken cancellationToken)
+    public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
         var product = await context.Products
             .ProjectToType<ProductListDto>()
