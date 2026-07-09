@@ -31,7 +31,8 @@ namespace Shared.Data.Interceptors
                 .ToList();
 
             var domainEvents = aggregates
-                .SelectMany(a => a.DomainEvents);
+                .SelectMany(a => a.DomainEvents)
+                .ToList();
 
             aggregates.ForEach(a => a.ClearDomainEvents());
 

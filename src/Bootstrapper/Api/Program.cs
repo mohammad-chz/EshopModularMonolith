@@ -1,10 +1,21 @@
+using Serilog;
+using Shared.ExceptionHandlers;
 using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddCarterWithAssemblies(typeof(CatalogModule).Assembly);
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddCarterWithAssemblies(typeof(CatalogModule).Assembly, typeof(BasketModule).Assembly);
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services
     .AddCatalogModule(builder.Configuration)
@@ -12,6 +23,9 @@ builder.Services
     .AddOrderingModule(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
 
 app.MapCarter();
 

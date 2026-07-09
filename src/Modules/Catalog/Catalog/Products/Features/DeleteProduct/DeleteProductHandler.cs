@@ -1,5 +1,6 @@
 ﻿using Catalog.Data;
 using Catalog.Products.Exceptions;
+using FluentValidation;
 using Shared.CQRS;
 
 namespace Catalog.Products.Features.DeleteProduct;
@@ -7,6 +8,16 @@ namespace Catalog.Products.Features.DeleteProduct;
 public record DeleteProductCommand(Guid Id) : ICommand<DeleteProductResult>;
 
 public record DeleteProductResult(bool IsSuccess);
+
+public class DeleteProductValidator : AbstractValidator<DeleteProductCommand>
+{
+    public DeleteProductValidator()
+    {
+        RuleFor(p => p.Id)
+            .NotEmpty()
+            .WithMessage("شناسه محصول وارد نشده.");
+    }
+}
 
 internal class DeleteProductHandler(CatalogDbContext context) : ICommandHandler<DeleteProductCommand, DeleteProductResult>
 {

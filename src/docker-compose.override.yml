@@ -3,10 +3,21 @@ version: '3.8'
 services:
   eshobdb:
     environment:
-      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
-      - TZ=UTC
+      TZ: UTC
     ports:
       - "1433:1433"
-    # Uncomment for development/debugging
-    # stdin_open: true
-    # tty: true
+
+  seq:
+    container_name: seq
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    ports:
+      - "5341:5341"
+      - "9091:80"
+    volumes:
+      - seq-data:/data
+    restart: unless-stopped
+
+volumes:
+  seq-data:

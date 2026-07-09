@@ -1,4 +1,6 @@
 ﻿
+using Shared.Exceptions;
+
 namespace Catalog.Products.Models
 {
     public class Product : Aggregate<Guid>
@@ -11,8 +13,11 @@ namespace Catalog.Products.Models
 
         public static Product Create(string name, List<string> category, string? description, string? imageFile, decimal price)
         {
-            ArgumentException.ThrowIfNullOrEmpty(name);
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Product name cannot be empty.");
+
+            if (price <= 0)
+                throw new DomainException("Product price must be greater than zero.");
 
             var product = new Product
             {

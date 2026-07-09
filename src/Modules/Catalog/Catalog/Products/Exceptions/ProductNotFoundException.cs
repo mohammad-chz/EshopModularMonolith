@@ -1,9 +1,11 @@
-﻿namespace Catalog.Products.Exceptions
+﻿using Shared.Exceptions;
+
+namespace Catalog.Products.Exceptions
 {
-    internal class ProductNotFoundException : Exception
+    internal sealed class ProductNotFoundException : NotFoundException
     {
         public ProductNotFoundException(Guid id)
-            : base($"Product with ID '{id}' was not found.")
+            : base("product", id)
         {
         }
     }
