@@ -4,7 +4,7 @@ public record CreateProductRequest(CreateProductDto Product);
 
 public record CreateProductResponse(Guid Id);
 
-internal class CreateProductEndpoint : ICarterModule
+public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

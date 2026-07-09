@@ -16,9 +16,9 @@ public class GetProductByIdEndpoint : ICarterModule
         {
             var query = await sender.Send(new GetProductByIdQuery(id), cancellationToken);
 
-            var reslt = query.Adapt<GetProductsByIdResponse>();
+            var result = query.Adapt<GetProductsByIdResponse>();
 
-            return Results.Ok(reslt);
+            return Results.Ok(result);
         })
         .WithName("GetProductById")
         .Produces<GetProductsByIdResponse>(StatusCodes.Status200OK)

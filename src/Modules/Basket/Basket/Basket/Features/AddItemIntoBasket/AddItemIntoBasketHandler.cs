@@ -1,12 +1,11 @@
 ﻿using Basket.Basket.Exceptions;
-using Basket.Basket.Models;
 using Basket.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Basket.Basket.Features.AddItemIntoBasket;
 
 
-public record AddItemIntoBasketCommand(AddShoppingCartItem ShoppingCartItem) : ICommand<AddItemIntoBasketResult>;
+public record AddItemIntoBasketCommand(string UserName, AddShoppingCartItem ShoppingCartItem) : ICommand<AddItemIntoBasketResult>;
 
 public record AddItemIntoBasketResult(Guid Id);
 
@@ -14,7 +13,7 @@ public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCom
 {
     public AddItemIntoBasketValidator()
     {
-        RuleFor(b => b.ShoppingCartItem.UserName)
+        RuleFor(b => b.UserName)
             .NotEmpty().WithMessage("نام کاربری وارد نشده.");
 
         RuleFor(b => b.ShoppingCartItem.ProductId)
@@ -34,7 +33,7 @@ internal class AddItemIntoBasketHandler(BasketDbContext context) : ICommandHandl
 {
     public async Task<AddItemIntoBasketResult> Handle(AddItemIntoBasketCommand command, CancellationToken cancellationToken)
     {
-        var userName = command.ShoppingCartItem.UserName.Trim();
+        var userName = command.UserName.Trim();
 
         var basket = await context.ShoppingCarts
             .Include(s => s.Items)

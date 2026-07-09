@@ -1,6 +1,4 @@
-﻿using Catalog.Products.Features.CreateProduct;
-
-namespace Catalog.Products.Features.DeleteProduct;
+﻿namespace Catalog.Products.Features.DeleteProduct;
 
 public record DeleteProductResponse(bool IsSuccess);
 

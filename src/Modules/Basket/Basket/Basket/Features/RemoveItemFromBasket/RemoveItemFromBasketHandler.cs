@@ -6,7 +6,7 @@ namespace Basket.Basket.Features.RemoveItemFromBasket;
 
 public record RemoveItemFromBasketCommand(string UserName, Guid ProductId) : ICommand<RemoveItemFromBasketResult>;
 
-public record RemoveItemFromBasketResult(Guid Id);
+public record RemoveItemFromBasketResult(bool IsSuucess);
 
 public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBasketCommand>
 {
@@ -35,6 +35,6 @@ internal class RemoveItemFromBasketHandler(BasketDbContext context) : ICommandHa
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new RemoveItemFromBasketResult(basket.Id);
+        return new RemoveItemFromBasketResult(true);
     }
 }
