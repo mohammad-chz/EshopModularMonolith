@@ -4,5 +4,5 @@ namespace Basket.Dtos;
 
 public record CreateShoppingCartDto(
     string UserName,
-    List<ShoppingCartItemDto> Items
+    List<CreateShoppingCartItemDto> Items
     );

@@ -1,7 +1,5 @@
 ﻿using Basket.Basket.Exceptions;
-using Basket.Data;
-using Mapster;
-using Microsoft.EntityFrameworkCore;
+using Basket.Data.Repository;
 
 namespace Basket.Basket.Features.GetBasket;
 
@@ -19,18 +17,17 @@ public class GetBasketValidator : AbstractValidator<GetBasketQuery>
     }
 }
 
-internal class GetBasketHandler(BasketDbContext context) : IQueryhandler<GetBasketQuery, GetBasketResult>
+internal class GetBasketHandler(IBasketRepository repository) : IQueryhandler<GetBasketQuery, GetBasketResult>
 {
     public async Task<GetBasketResult> Handle(GetBasketQuery query, CancellationToken cancellationToken)
     {
         var userName = query.UserName.Trim();
 
-        var basket = await context.ShoppingCarts
-            .AsNoTracking()
-            .Where(s => s.UserName == userName)
-            .ProjectToType<ShoppingCartDto>()
-            .SingleOrDefaultAsync(cancellationToken) ?? throw new BasketNotFoundException(userName);
+        var basket = await repository.GetBasket(userName, ct: cancellationToken)
+                    ?? throw new BasketNotFoundException(userName);
 
-        return new GetBasketResult(basket);
+        var result = basket.Adapt<ShoppingCartDto>();
+
+        return new GetBasketResult(result);
     }
 }

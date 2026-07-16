@@ -1,5 +1,6 @@
 ﻿using Basket.Basket.Models;
 using Basket.Data;
+using Basket.Data.Repository;
 
 namespace Basket.Basket.Features.CreateBasket;
 
@@ -17,22 +18,20 @@ public class CreateBasketValidator : AbstractValidator<CreateBasketCommand>
     }
 }
 
-internal class CreateBasketHandler(BasketDbContext context) : ICommandHandler<CreateBasketCommand, CreateBasketResult>
+internal class CreateBasketHandler(IBasketRepository repository) : ICommandHandler<CreateBasketCommand, CreateBasketResult>
 {
     public async Task<CreateBasketResult> Handle(CreateBasketCommand command, CancellationToken cancellationToken)
     {
-        var shoppingCart = CreateNewBasket(command.ShoppingCart);
+        var basket = CreateNewBasket(command.ShoppingCart);
 
-        context.ShoppingCarts.Add(shoppingCart);
+        await repository.CreateBasket(basket, cancellationToken);
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        return new CreateBasketResult(shoppingCart.Id);
+        return new CreateBasketResult(basket.Id);
     }
 
     private static ShoppingCart CreateNewBasket(CreateShoppingCartDto shoppingCart)
     {
-        var newBasket = ShoppingCart.Create(shoppingCart.UserName.Trim());
+        var newBasket = ShoppingCart.Create(shoppingCart.UserName);
 
         shoppingCart.Items.ForEach(item =>
         {

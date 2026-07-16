@@ -11,7 +11,7 @@ namespace Shared.Behaviors
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var context = new ValidationContext<TRequest>(request);
-
+                
             var validationsReults = await Task.WhenAll(validators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
             var failures = validationsReults

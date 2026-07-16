@@ -12,7 +12,10 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+// common services: carter, mediatR, fluentValidation
 builder.Services.AddCarterWithAssemblies(typeof(CatalogModule).Assembly, typeof(BasketModule).Assembly);
+
+builder.Services.AddMediatRWithAssemblies(typeof(CatalogModule).Assembly, typeof(BasketModule).Assembly);
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

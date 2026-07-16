@@ -1,12 +1,13 @@
 ﻿using Basket.Basket.Exceptions;
 using Basket.Data;
+using Basket.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Basket.Basket.Features.RemoveItemFromBasket;
 
 public record RemoveItemFromBasketCommand(string UserName, Guid ProductId) : ICommand<RemoveItemFromBasketResult>;
 
-public record RemoveItemFromBasketResult(bool IsSuucess);
+public record RemoveItemFromBasketResult(bool IsSuccess);
 
 public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBasketCommand>
 {
@@ -20,20 +21,16 @@ public class RemoveItemFromBasketValidator : AbstractValidator<RemoveItemFromBas
     }
 }
 
-internal class RemoveItemFromBasketHandler(BasketDbContext context) : ICommandHandler<RemoveItemFromBasketCommand, RemoveItemFromBasketResult>
+internal class RemoveItemFromBasketHandler(IBasketRepository repository) : ICommandHandler<RemoveItemFromBasketCommand, RemoveItemFromBasketResult>
 {
     public async Task<RemoveItemFromBasketResult> Handle(RemoveItemFromBasketCommand command, CancellationToken cancellationToken)
     {
-        var userName = command.UserName.Trim();
-
-        var basket = await context.ShoppingCarts
-            .Include(s => s.Items)
-            .SingleOrDefaultAsync(s => s.UserName == userName, cancellationToken)
-            ?? throw new BasketNotFoundException(userName);
+        var basket = await repository.GetBasket(command.UserName, asNoTracking: false, cancellationToken)
+            ?? throw new BasketNotFoundException(command.UserName);
 
         basket.RemoveItem(command.ProductId);
 
-        await context.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
 
         return new RemoveItemFromBasketResult(true);
     }

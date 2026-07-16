@@ -14,7 +14,7 @@ namespace Basket.Basket.Models
         private ShoppingCart(Guid id, string userName)
         {
             Id = id;
-            UserName = userName;
+            UserName = userName.Trim().ToLower();
         }
 
         public static ShoppingCart Create(string userName)
@@ -41,7 +41,6 @@ namespace Basket.Basket.Models
                 existing.IncreaseQuantity(quantity);
             else
                 _items.Add(new ShoppingCartItem(Id, productId, quantity, color, price, productName));
-
         }
 
         public void RemoveItem(Guid productId)

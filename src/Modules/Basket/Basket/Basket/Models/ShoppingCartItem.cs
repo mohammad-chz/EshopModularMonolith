@@ -15,6 +15,7 @@ namespace Basket.Basket.Models
 
         internal ShoppingCartItem(Guid shoppingCartId, Guid productId, int quantity, string? color, long price, string productName)
         {
+            Id = SequentialGuid.NewId();
             ShoppingCartId = shoppingCartId;
             ProductId = productId;
             Quantity = quantity;

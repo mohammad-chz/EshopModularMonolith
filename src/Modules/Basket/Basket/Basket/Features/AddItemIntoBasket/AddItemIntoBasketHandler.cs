@@ -1,5 +1,6 @@
 ﻿using Basket.Basket.Exceptions;
 using Basket.Data;
+using Basket.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Basket.Basket.Features.AddItemIntoBasket;
@@ -29,16 +30,12 @@ public class AddItemIntoBasketValidator : AbstractValidator<AddItemIntoBasketCom
             .GreaterThan(0).WithMessage("قیمت باید بیشتر از صفر باشد.");
     }
 }
-internal class AddItemIntoBasketHandler(BasketDbContext context) : ICommandHandler<AddItemIntoBasketCommand, AddItemIntoBasketResult>
+internal class AddItemIntoBasketHandler(IBasketRepository repository) : ICommandHandler<AddItemIntoBasketCommand, AddItemIntoBasketResult>
 {
     public async Task<AddItemIntoBasketResult> Handle(AddItemIntoBasketCommand command, CancellationToken cancellationToken)
     {
-        var userName = command.UserName.Trim();
-
-        var basket = await context.ShoppingCarts
-            .Include(s => s.Items)
-            .SingleOrDefaultAsync(s => s.UserName == userName, cancellationToken)
-            ?? throw new BasketNotFoundException(userName);
+        var basket = await repository.GetBasket(command.UserName, asNoTracking: false, cancellationToken)
+            ?? throw new BasketNotFoundException(command.UserName);
 
         basket.AddItem(
            command.ShoppingCartItem.ProductId,
@@ -48,7 +45,7 @@ internal class AddItemIntoBasketHandler(BasketDbContext context) : ICommandHandl
            command.ShoppingCartItem.ProductName
            );
 
-        await context.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
 
         return new AddItemIntoBasketResult(basket.Id);
     }

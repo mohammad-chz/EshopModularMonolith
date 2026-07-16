@@ -1,13 +1,11 @@
 ﻿using Basket.Data;
-using Microsoft.AspNetCore.Builder;
+using Basket.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Behaviors;
 using Shared.Data;
 using Shared.Data.Interceptors;
-using System.Reflection;
 
 namespace Basket
 {
@@ -20,14 +18,7 @@ namespace Basket
             // Api EndPoint services
 
             // Application Use Case services
-            services.AddMediatR(config =>
-            {
-                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                config.AddOpenBehavior(typeof(ValidationBehavior<,>));
-                config.AddOpenBehavior(typeof(LoggingBehavior<,>));
-            });
-
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             // Data - Infrastructure services
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
