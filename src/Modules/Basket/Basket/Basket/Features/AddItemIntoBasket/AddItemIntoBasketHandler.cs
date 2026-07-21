@@ -45,7 +45,7 @@ internal class AddItemIntoBasketHandler(IBasketRepository repository) : ICommand
            command.ShoppingCartItem.ProductName
            );
 
-        await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(command.UserName, cancellationToken);
 
         return new AddItemIntoBasketResult(basket.Id);
     }

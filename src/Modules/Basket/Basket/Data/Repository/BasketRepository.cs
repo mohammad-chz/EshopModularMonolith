@@ -40,7 +40,7 @@ namespace Basket.Data.Repository
             return context.ShoppingCarts;
         }
 
-        public async Task<int> SaveChangesAsync(CancellationToken ct = default)
+        public async Task<int> SaveChangesAsync(string? userName = null, CancellationToken ct = default)
         {
             return await context.SaveChangesAsync(ct);
         }

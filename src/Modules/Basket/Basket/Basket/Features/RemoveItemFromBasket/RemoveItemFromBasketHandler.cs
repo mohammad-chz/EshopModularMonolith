@@ -30,7 +30,7 @@ internal class RemoveItemFromBasketHandler(IBasketRepository repository) : IComm
 
         basket.RemoveItem(command.ProductId);
 
-        await repository.SaveChangesAsync(cancellationToken);
+        await repository.SaveChangesAsync(command.UserName, cancellationToken);
 
         return new RemoveItemFromBasketResult(true);
     }
